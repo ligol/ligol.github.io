@@ -132,7 +132,21 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>After this the Network Inspection will work on your project and each request you have added to your RequestQueue will be printed in the Chrome Dev Tools.</p>
+<h4>The Ion Support</h4>
+
+<p>So let&rsquo;s start with Ion Support :</p>
+
+<p>To enable the support of Network Inspection on Ion we are going to use the Ion StethoMiddleware made by Koush specifically for Ion, you can find it on <a href="https://github.com/koush/AndroidAsync/tree/master/AndroidAsyncStetho">this link</a>.
+So after adding this files to your project you just need to add the StethoMiddleware to Ion with this code line:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Ion</span><span class="o">.</span><span class="na">getDefault</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">getHttpClient</span><span class="o">().</span><span class="na">getMiddleware</span><span class="o">()</span>
+</span><span class='line'><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">StethoMiddleware</span><span class="o">());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After this the Network Inspection will work on your project and each request you have launched will be printed in the Chrome Dev Tools.</p>
 </div>
 
 </article>
