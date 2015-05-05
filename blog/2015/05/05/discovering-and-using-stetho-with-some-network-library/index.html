@@ -90,7 +90,7 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 	<h1 class="title" itemprop="name">Discovering and Using Stetho With Some Network Library</h1>
-	<div class="entry-content" itemprop="articleBody"><p>During my work on some personal project, I was digging around the web(Reddit, &hellip;) and I&rsquo;ve found that great Debugging library developped by Facebook and named <a href="http://facebook.github.io/stetho/">Stetho</a></p>
+	<div class="entry-content" itemprop="articleBody"><p>During my work on some personal project, I was digging around the web(Reddit, &hellip;) and I&rsquo;ve found that great Debugging library developed by Facebook and named <a href="http://facebook.github.io/stetho/">Stetho</a></p>
 
 <h2>The Stetho Library</h2>
 
@@ -100,7 +100,7 @@
 
 <h3>The Network Inspection element</h3>
 
-<p>But one of the best thing of this tools is the Network Inspection element, who allow you to inspect all of the request made by your application and see in details which Headers are sended or received, which response you get and all the other thing you can need on networking.</p>
+<p>But one of the best thing of this tools is the Network Inspection element, who allow you to inspect all of the request made by your application and see in details which Headers are sent or received, which response you get and all the other thing you can need on networking.</p>
 
 <p>Only at this time Stetho only support OkHttp and UrlConnection directly. So if you use Volley or ION, you can&rsquo;t directly use this tools, I&rsquo;m personally using this tools, so I spend time to search a way to enable this with these library and I finally found some interesting workaround.</p>
 
@@ -108,7 +108,7 @@
 
 <p>So let&rsquo;s start with Volley Support :</p>
 
-<p>To enable the support of Network Inspection on Volley we are going to use OkHttp as base for the Volley HttpStack you can find a gist shared by Bryan Stern at <a href="https://gist.github.com/bryanstern/4e8f1cb5a8e14c202750">this link</a> with a working implemetation. So take this java file and add it to your project now we need to create our RequestQueue and link it to Stetho.</p>
+<p>To enable the support of Network Inspection on Volley we are going to use OkHttp as base for the Volley HttpStack you can find a gist shared by Bryan Stern at <a href="https://gist.github.com/bryanstern/4e8f1cb5a8e14c202750">this link</a> with a working implementation. So take this java file and add it to your project now we need to create our RequestQueue and link it to Stetho.</p>
 
 <p>This is the code you need:</p>
 
