@@ -4,7 +4,7 @@
   <title><![CDATA[Category: android | Ligol Blog]]></title>
   <link href="http://ligol.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://ligol.github.io/"/>
-  <updated>2015-05-06T00:18:12+02:00</updated>
+  <updated>2015-05-06T00:25:39+02:00</updated>
   <id>http://ligol.github.io/</id>
   <author>
     <name><![CDATA[Baptiste Lagache]]></name>
@@ -44,6 +44,15 @@
 client.networkInterceptors().add(new StethoInterceptor());
 mRequestQueue = Volley.newRequestQueue(getApplicationContext(), new OkHttpStack(client));
 </code></pre>
+
+<p>You also need to add these dependency to your project:</p>
+
+<pre><code>compile 'com.facebook.stetho:stetho:1.1.1'
+compile 'com.facebook.stetho:stetho-okhttp:1.1.1'
+compile 'com.squareup.okhttp:okhttp:2.3.0'
+</code></pre>
+
+<p>After this the Network Inspection will work on your project and each request you have added to your RequestQueue will be printed in the Chrome Dev Tools.</p>
 ]]></content>
   </entry>
   
