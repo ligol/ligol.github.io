@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://ligol.github.io/blog/2015/05/05/discovering-and-using-stetho-with-some-network-library/</loc>
+    <lastmod>2015-05-05T23:30:40+02:00</lastmod>
+  </url>
+  <url>
     <loc>http://ligol.github.io/blog/2015/05/01/new-blog-with-octopress/</loc>
     <lastmod>2015-05-01T09:58:59+02:00</lastmod>
   </url>
@@ -21,5 +25,8 @@
   </url>
   <url>
     <loc>http://ligol.github.io/blog/categories/android/</loc>
+  </url>
+  <url>
+    <loc>http://ligol.github.io/blog/categories/networking/</loc>
   </url>
 </urlset>
