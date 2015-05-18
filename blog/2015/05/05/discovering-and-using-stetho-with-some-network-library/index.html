@@ -110,6 +110,9 @@
 
 <p>Concerning the Database Inspection and the View Hierarchy everything work fine just after adding the library and enabled it like it&rsquo;s explained on the <a href="http://facebook.github.io/stetho/">Stetho website</a>.</p>
 
+<!-- more -->
+
+
 <h3>The Network Inspection element</h3>
 
 <p>But one of the best thing of this tools is the Network Inspection element, who allow you to inspect all of the request made by your application and see in details which Headers are sent or received, which response you get and all the other thing you can need on networking.</p>
@@ -159,6 +162,90 @@ So after adding this files to your project you just need to add the StethoMiddle
 
 
 <p>After this the Network Inspection will work on your project and each request you have launched will be printed in the Chrome Dev Tools.</p>
+
+<h3>Going Further</h3>
+
+<h4>Include and Enable only on Debug Build</h4>
+
+<p>The next goal is to have the Stetho support only on Debug build and to don&rsquo;t have any dependency on the Release Apk of your application.</p>
+
+<p>To do this, we are going to use the BuildType system of gradle in Android Studio.
+Two files will be extended or override by a new version to achieve this goal.</p>
+
+<p>Let&rsquo;s start with the application class where we enable Stetho, create a new class named for exemple ApplicationControllerExtension in the debug folder(src/java/debug) and make this class extends your Application class. Next step add the Stetho initialization in this class and remove it from the Application class.
+This is a sample of class with the Volley initialization:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppControllerExtension</span> <span class="kd">extends</span> <span class="n">AppController</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">Stetho</span><span class="o">.</span><span class="na">initialize</span><span class="o">(</span>
+</span><span class='line'>                <span class="n">Stetho</span><span class="o">.</span><span class="na">newInitializerBuilder</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+</span><span class='line'>                        <span class="o">.</span><span class="na">enableDumpapp</span><span class="o">(</span><span class="n">Stetho</span><span class="o">.</span><span class="na">defaultDumperPluginsProvider</span><span class="o">(</span><span class="k">this</span><span class="o">))</span>
+</span><span class='line'>                        <span class="o">.</span><span class="na">enableWebKitInspector</span><span class="o">(</span><span class="n">Stetho</span><span class="o">.</span><span class="na">defaultInspectorModulesProvider</span><span class="o">(</span><span class="k">this</span><span class="o">))</span>
+</span><span class='line'>                        <span class="o">.</span><span class="na">build</span><span class="o">());</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">RequestQueue</span> <span class="nf">getRequestQueue</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">mRequestQueue</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">OkHttpClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">OkHttpClient</span><span class="o">();</span>
+</span><span class='line'>            <span class="n">client</span><span class="o">.</span><span class="na">networkInterceptors</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">StethoInterceptor</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">mRequestQueue</span> <span class="o">=</span> <span class="n">Volley</span><span class="o">.</span><span class="na">newRequestQueue</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span> <span class="k">new</span> <span class="nf">OkHttpStack</span><span class="o">(</span><span class="n">client</span><span class="o">));</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">mRequestQueue</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A this point, it only miss one thing start your application with this class instead of the release class. To enable this we need to override the AndroidManifest file and change the Application class defined on it.</p>
+
+<p>This a AndroidManifest sample overriding the application section of our release manifest to enable the ApplicationControllerExtention class:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+</span><span class='line'><span class="nt">&lt;manifest</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+</span><span class='line'>    <span class="na">xmlns:tools=</span><span class="s">&quot;http://schemas.android.com/tools&quot;</span>
+</span><span class='line'>    <span class="na">package=</span><span class="s">&quot;com.mypackage.mypackage&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;application</span>
+</span><span class='line'>        <span class="na">android:name=</span><span class="s">&quot;com.mypackage.mypackage.ApplicationControllerExtension&quot;</span>
+</span><span class='line'>        <span class="na">tools:replace=</span><span class="s">&quot;android:name&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/application&gt;</span>
+</span><span class='line'><span class="nt">&lt;/manifest&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 </article>

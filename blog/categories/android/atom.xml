@@ -4,7 +4,7 @@
   <title><![CDATA[Category: android | Ligol Blog]]></title>
   <link href="http://ligol.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://ligol.github.io/"/>
-  <updated>2015-05-06T17:03:25+02:00</updated>
+  <updated>2015-05-18T12:05:19+02:00</updated>
   <id>http://ligol.github.io/</id>
   <author>
     <name><![CDATA[Baptiste Lagache]]></name>
@@ -25,6 +25,9 @@
 <p>This library as for goal to allow you to debug your android application by using the Chrome Developer Tools feature.</p>
 
 <p>Concerning the Database Inspection and the View Hierarchy everything work fine just after adding the library and enabled it like it&rsquo;s explained on the <a href="http://facebook.github.io/stetho/">Stetho website</a>.</p>
+
+<!-- more -->
+
 
 <h3>The Network Inspection element</h3>
 
@@ -64,6 +67,57 @@ So after adding this files to your project you just need to add the StethoMiddle
 </code></pre>
 
 <p>After this the Network Inspection will work on your project and each request you have launched will be printed in the Chrome Dev Tools.</p>
+
+<h3>Going Further</h3>
+
+<h4>Include and Enable only on Debug Build</h4>
+
+<p>The next goal is to have the Stetho support only on Debug build and to don&rsquo;t have any dependency on the Release Apk of your application.</p>
+
+<p>To do this, we are going to use the BuildType system of gradle in Android Studio.
+Two files will be extended or override by a new version to achieve this goal.</p>
+
+<p>Let&rsquo;s start with the application class where we enable Stetho, create a new class named for exemple ApplicationControllerExtension in the debug folder(src/java/debug) and make this class extends your Application class. Next step add the Stetho initialization in this class and remove it from the Application class.
+This is a sample of class with the Volley initialization:</p>
+
+<pre><code class="java">public class AppControllerExtension extends AppController {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                        .build());
+    }
+
+    public synchronized RequestQueue getRequestQueue() {
+        if (mRequestQueue == null) {
+            OkHttpClient client = new OkHttpClient();
+            client.networkInterceptors().add(new StethoInterceptor());
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext(), new OkHttpStack(client));
+        }
+        return mRequestQueue;
+    }
+}
+</code></pre>
+
+<p>A this point, it only miss one thing start your application with this class instead of the release class. To enable this we need to override the AndroidManifest file and change the Application class defined on it.</p>
+
+<p>This a AndroidManifest sample overriding the application section of our release manifest to enable the ApplicationControllerExtention class:</p>
+
+<pre><code class="xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.mypackage.mypackage"&gt;
+
+
+    &lt;application
+        android:name="com.mypackage.mypackage.ApplicationControllerExtension"
+        tools:replace="android:name"&gt;
+      &lt;/application&gt;
+&lt;/manifest&gt;
+</code></pre>
 ]]></content>
   </entry>
   

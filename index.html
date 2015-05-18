@@ -138,58 +138,9 @@
 
 <p>Concerning the Database Inspection and the View Hierarchy everything work fine just after adding the library and enabled it like it&rsquo;s explained on the <a href="http://facebook.github.io/stetho/">Stetho website</a>.</p>
 
-<h3>The Network Inspection element</h3>
-
-<p>But one of the best thing of this tools is the Network Inspection element, who allow you to inspect all of the request made by your application and see in details which Headers are sent or received, which response you get and all the other thing you can need on networking.</p>
-
-<p>Only at this time Stetho only support OkHttp and UrlConnection directly. So if you use Volley or ION, you can&rsquo;t directly use this tools, I&rsquo;m personally using this tools, so I spend time to search a way to enable this with these library and I finally found some interesting workaround.</p>
-
-<h4>The Volley Support</h4>
-
-<p>So let&rsquo;s start with Volley Support :</p>
-
-<p>To enable the support of Network Inspection on Volley we are going to use OkHttp as base for the Volley HttpStack you can find a gist shared by Bryan Stern at <a href="https://gist.github.com/bryanstern/4e8f1cb5a8e14c202750">this link</a> with a working implementation. So take this java file and add it to your project now we need to create our RequestQueue and link it to Stetho.</p>
-
-<p>This is the code you need:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">OkHttpClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">OkHttpClient</span><span class="o">();</span>
-</span><span class='line'><span class="n">client</span><span class="o">.</span><span class="na">networkInterceptors</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">StethoInterceptor</span><span class="o">());</span>
-</span><span class='line'><span class="n">mRequestQueue</span> <span class="o">=</span> <span class="n">Volley</span><span class="o">.</span><span class="na">newRequestQueue</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span> <span class="k">new</span> <span class="nf">OkHttpStack</span><span class="o">(</span><span class="n">client</span><span class="o">));</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You also need to add these dependency to your project:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">compile</span> <span class="err">&#39;</span><span class="n">com</span><span class="o">.</span><span class="na">facebook</span><span class="o">.</span><span class="na">stetho</span><span class="o">:</span><span class="nl">stetho:</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">1</span><span class="err">&#39;</span>
-</span><span class='line'><span class="n">compile</span> <span class="err">&#39;</span><span class="n">com</span><span class="o">.</span><span class="na">facebook</span><span class="o">.</span><span class="na">stetho</span><span class="o">:</span><span class="n">stetho</span><span class="o">-</span><span class="nl">okhttp:</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">1</span><span class="err">&#39;</span>
-</span><span class='line'><span class="n">compile</span> <span class="err">&#39;</span><span class="n">com</span><span class="o">.</span><span class="na">squareup</span><span class="o">.</span><span class="na">okhttp</span><span class="o">:</span><span class="nl">okhttp:</span><span class="mf">2.3</span><span class="o">.</span><span class="mi">0</span><span class="err">&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>The Ion Support</h4>
-
-<p>So let&rsquo;s start with Ion Support :</p>
-
-<p>To enable the support of Network Inspection on Ion we are going to use the Ion StethoMiddleware made by Koush specifically for Ion, you can find it on <a href="https://github.com/koush/AndroidAsync/tree/master/AndroidAsyncStetho">this link</a>.
-So after adding this files to your project you just need to add the StethoMiddleware to Ion with this code line:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Ion</span><span class="o">.</span><span class="na">getDefault</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">getHttpClient</span><span class="o">().</span><span class="na">getMiddleware</span><span class="o">()</span>
-</span><span class='line'><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">StethoMiddleware</span><span class="o">());</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After this the Network Inspection will work on your project and each request you have launched will be printed in the Chrome Dev Tools.</p>
 
 		
-		
+		<a href="/blog/2015/05/05/discovering-and-using-stetho-with-some-network-library/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>
